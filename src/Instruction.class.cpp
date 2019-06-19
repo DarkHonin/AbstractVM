@@ -12,6 +12,8 @@ Instruction *Instruction::createInstruction(std::string op, std::string param){
 		return new Push(param);
 	if(op == "dump")
 		return new Dump();
+
+	throw Instruction::InvalidInstruction();
 }
 
 
@@ -34,15 +36,17 @@ const OperandFactory Push::factory = OperandFactory();
 Push::Push(std::string par) : Instruction(par){}
 Push::~Push(){}
 
-void Push::execute(std::vector<IOperand> &s){
+bool Push::execute(std::vector<IOperand const *> &s){
 	std::smatch match;
 	std::regex_match(_paramString, match, this->paramRegex);
 	int t;
-	if(match.size() < 3) throw "Heck"; // Coming soon
+	if(match.size() != 3) throw OperandFactory::InvalidOperand();
 	for(t = 0; t < 5; t++)
 		if(match[1].str() == this->opperandIndex[t]) break;
-	std::cout << this->factory.createOperand((eOperandType) t, match[2])->toString() << std::endl;
-	std::cout << "It works" << t << std::endl;
+	if(t == 5) throw OperandFactory::InvalidOperand();
+	IOperand const *i = this->factory.createOperand((eOperandType) t, match[2]);
+	s.push_back(i);
+	return true;
 }
 
 /* * * * * * * * * * * *\
@@ -56,9 +60,10 @@ void Push::execute(std::vector<IOperand> &s){
 Dump::Dump(std::string par) : Instruction(par){}
 Dump::~Dump(){}
 
-void Dump::execute(std::vector<IOperand> &s){
-	for(std::vector<IOperand>::iterator e = s.begin(); e != s.end(); e++)
-		std::cout << e->toString() << std::endl;
+bool Dump::execute(std::vector<IOperand const *> &s){
+	for(std::vector<IOperand const *>::iterator e = s.begin(); e != s.end(); e++)
+		std::cout << (*e)->toString() << std::endl;
+	return true;
 }
 
 /* * * * * * * * * * * *\

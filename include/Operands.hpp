@@ -1,10 +1,12 @@
 #ifndef OPERANDS_H
 #define OPERANDS_H
 
+#include <exception>
 #include "IOperand.class.hpp"
 
 class Operand : public IOperand{
 	public:
+		class InvalidValue : public std::exception{};
 		Operand(std::string const & value);
 		Operand(byte * value);
 		Operand(Operand &toclone);
@@ -44,6 +46,39 @@ class Int16: public Operand{
 	public:
 		Int16(std::string const &value);
 		~Int16();
+
+		int getPrecision(void) const;
+		eOperandType getType(void)	const;
+		std::string const & toString(void) const;
+		byte *fromString(std::string s);
+};
+
+class Int32: public Operand{
+	public:
+		Int32(std::string const &value);
+		~Int32();
+
+		int getPrecision(void) const;
+		eOperandType getType(void)	const;
+		std::string const & toString(void) const;
+		byte *fromString(std::string s);
+};
+
+class Float: public Operand{
+	public:
+		Float(std::string const &value);
+		~Float();
+
+		int getPrecision(void) const;
+		eOperandType getType(void)	const;
+		std::string const & toString(void) const;
+		byte *fromString(std::string s);
+};
+
+class Double: public Operand{
+	public:
+		Double(std::string const &value);
+		~Double();
 
 		int getPrecision(void) const;
 		eOperandType getType(void)	const;

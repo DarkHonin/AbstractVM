@@ -9,6 +9,7 @@ typedef IOperand const *(OperandFactory::*creator)(std::string const &v) const;
 
 class OperandFactory{
 	public:
+		class InvalidOperand : public std::exception{};
 		IOperand const * createOperand( eOperandType type, std::string const & value ) const;
 	private:
 		static const creator _creators[5];

@@ -1,6 +1,7 @@
 #include "Program.class.hpp"
 #include <sstream>
 #include "Instruction.class.hpp"
+#include "Operands.hpp"
 
 const std::regex Program::command_regex = std::regex("^(\\w+)\\s*([\\w\\d\\(\\)]*);?(.*)?", std::regex_constants::ECMAScript | std::regex_constants::icase);
 
@@ -19,9 +20,13 @@ bool Program::next(){
 	if (match.empty())
 		return false;
 	Instruction* op;
-	for(int x = 0; x < match.size(); x++)
-		std::cout << x <<": " << match[x] << std::endl;
-	op = Instruction::createInstruction(match[1].str(), match[2].str());
-	op->execute(this->_stack);
-	return false;
+	try {
+		op = Instruction::createInstruction(match[1].str(), match[2].str());
+		op->execute(this->_stack);
+	} catch (OperandFactory::InvalidOperand &e){
+		std::cerr << "Invalid opperand: `" << match[2].str() << "`" << std::endl;
+	}catch (Instruction::InvalidInstruction &e){
+		std::cerr << "Invalid instruction: `" << match[1].str() << "`" << std::endl;
+	}
+	return true;
 }

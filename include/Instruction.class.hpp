@@ -22,16 +22,15 @@
  */
 
 class Instruction{
-
-
 	public:
+		class InvalidInstruction : public std::exception{};
 		Instruction(std::string param = "");
 		Instruction(Instruction &cp);
 		~Instruction();
 
 		static Instruction *createInstruction(std::string op, std::string param);
 		
-		virtual void execute(std::vector<IOperand> &s) = 0;
+		virtual bool execute(std::vector<IOperand const *> &s) = 0;
 		const std::string _paramString;
 };
 
@@ -43,14 +42,14 @@ class Push : public Instruction{
 
 		Push(std::string param = "");
 		~Push();
-		void execute(std::vector<IOperand> &s);
+		bool execute(std::vector<IOperand const *> &s);
 };
 
 class Dump : public Instruction{
 	public:
 		Dump(std::string param = "");
 		~Dump();
-		void execute(std::vector<IOperand> &s);
+		bool execute(std::vector<IOperand const *> &s);
 };
 
 #endif

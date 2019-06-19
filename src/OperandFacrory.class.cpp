@@ -11,6 +11,7 @@ const creator OperandFactory::_creators[5] = {
 };
 
 IOperand const * OperandFactory::createOperand( eOperandType type, std::string const & value ) const{
+	if (type < 0 || type > 5) throw OperandFactory::InvalidOperand();
 	return (this->*_creators[type])(value);
 }
 
@@ -20,6 +21,12 @@ IOperand const * OperandFactory::createInt8(std::string const & value ) const{
 IOperand const * OperandFactory::createInt16(std::string const & value ) const{
 	return new class Int16(value);
 }
-IOperand const * OperandFactory::createInt32(std::string const & value ) const{}
-IOperand const * OperandFactory::createFloat(std::string const & value ) const{}
-IOperand const * OperandFactory::createDouble(std::string const & value ) const{}
+IOperand const * OperandFactory::createInt32(std::string const & value ) const{
+	return new class Int32(value);
+}
+IOperand const * OperandFactory::createFloat(std::string const & value ) const{
+	return new class Float(value);
+}
+IOperand const * OperandFactory::createDouble(std::string const & value ) const{
+	return new class Double(value);
+}
