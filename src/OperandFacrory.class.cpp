@@ -16,17 +16,17 @@ IOperand const * OperandFactory::createOperand( eOperandType type, std::string c
 }
 
 IOperand const * OperandFactory::createInt8(std::string const & value ) const{
-	return new class Int8(value);
+	return SpawnOp((int8_t)std::stoi(value));
 }
 IOperand const * OperandFactory::createInt16(std::string const & value ) const{
-	return new class Int16(value);
+	return SpawnOp((int16_t)std::stoi(value));
 }
 IOperand const * OperandFactory::createInt32(std::string const & value ) const{
-	return new class Int32(value);
+	return SpawnOp((int32_t)std::stoi(value));
 }
 IOperand const * OperandFactory::createFloat(std::string const & value ) const{
-	return new class Float(value);
+	return SpawnOp((float_t)std::stoi(value));
 }
 IOperand const * OperandFactory::createDouble(std::string const & value ) const{
-	return new class Double(value);
+	return SpawnOp((double_t)std::stoi(value));
 }

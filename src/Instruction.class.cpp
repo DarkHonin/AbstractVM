@@ -7,11 +7,13 @@
 \* * * * * * * * * * * */
 
 Instruction *Instruction::createInstruction(std::string op, std::string param){
-	std::cout << "Instruction op: " << op << std::endl;
 	if(op == "push")
 		return new Push(param);
 	if(op == "dump")
 		return new Dump();
+	if(op == "sum")
+		return new Sum();
+	
 
 	throw Instruction::InvalidInstruction();
 }
@@ -29,7 +31,7 @@ Instruction::~Instruction(){}
 |		Push Start	 	|
 \* * * * * * * * * * * */
 
-const std::regex Push::paramRegex = std::regex("^(\\w+)\\((\\d+)\\)$", std::regex_constants::ECMAScript | std::regex_constants::icase);
+const std::regex Push::paramRegex = std::regex("^(\\w+)\\((.+)\\)$", std::regex_constants::ECMAScript | std::regex_constants::icase);
 const std::string Push::opperandIndex[5] = {"int8", "int16", "int32", "float", "double"};
 const OperandFactory Push::factory = OperandFactory();
 
@@ -63,6 +65,24 @@ Dump::~Dump(){}
 bool Dump::execute(std::vector<IOperand const *> &s){
 	for(std::vector<IOperand const *>::iterator e = s.begin(); e != s.end(); e++)
 		std::cout << (*e)->toString() << std::endl;
+	return true;
+}
+
+/* * * * * * * * * * * *\
+|		Dump End	 	|
+\* * * * * * * * * * * */
+
+/* * * * * * * * * * * *\
+|		Sum Start	 	|
+\* * * * * * * * * * * */
+
+Sum::Sum(std::string par) : Instruction(par){}
+Sum::~Sum(){}
+
+bool Sum::execute(std::vector<IOperand const *> &s){
+	IOperand const *a = *(s.end() - 1);
+	IOperand const *b = *(s.end() - 2);
+	IOperand const *c = *a + *b;
 	return true;
 }
 

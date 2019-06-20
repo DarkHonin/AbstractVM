@@ -52,4 +52,11 @@ class Dump : public Instruction{
 		bool execute(std::vector<IOperand const *> &s);
 };
 
+class Sum : public Instruction{
+	public:
+		Sum(std::string param = "");
+		~Sum();
+		bool execute(std::vector<IOperand const *> &s);
+};
+
 #endif

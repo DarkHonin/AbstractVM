@@ -3,7 +3,7 @@
 #include "Instruction.class.hpp"
 #include "Operands.hpp"
 
-const std::regex Program::command_regex = std::regex("^(\\w+)\\s*([\\w\\d\\(\\)]*);?(.*)?", std::regex_constants::ECMAScript | std::regex_constants::icase);
+const std::regex Program::command_regex = std::regex("^(\\w+)\\s*([\\w\\d\\(\\)-\\.]*);?(.*)?", std::regex_constants::ECMAScript | std::regex_constants::icase);
 
 Program::Program(std::istream &in) : _in(in){
 

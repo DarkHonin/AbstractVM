@@ -3,17 +3,17 @@
 
 #include <exception>
 #include "IOperand.class.hpp"
-
+template <typename T, eOperandType t>
 class Operand : public IOperand{
 	public:
 		class InvalidValue : public std::exception{};
-		Operand(std::string const & value);
-		Operand(byte * value);
+
 		Operand(Operand &toclone);
+		Operand(T);
 		~Operand();
 
-		virtual int getPrecision(void) const = 0;
-		virtual eOperandType getType(void)	const = 0;
+		int getPrecision(void) const;
+		eOperandType getType(void)	const;
 
 		IOperand const * operator+(IOperand const &rhs) const;
 		IOperand const * operator-(IOperand const &rhs) const;
@@ -21,69 +21,21 @@ class Operand : public IOperand{
 		IOperand const * operator/(IOperand const &rhs)	const;
 		IOperand const * operator%(IOperand const &rhs)	const;
 
-		virtual std::string const & toString(void) const = 0;
-		virtual byte *fromString(std::string s) = 0;
+		std::string const & toString(void) const;
 
-		byte * getValue() const;
+		T getValue() const;
 
 	private:
-		const byte *_value;
+		const int _presision;
+		const eOperandType _type;
+		const T _value;
 };
 
+Operand<int8_t, eOperandType::Int8>   *SpawnOp(int8_t);
+Operand<int16_t, eOperandType::Int16> *SpawnOp(int16_t);
+Operand<int32_t, eOperandType::Int32> *SpawnOp(int32_t);
+Operand<float_t, eOperandType::Float> *SpawnOp(float_t);
+Operand<double_t, eOperandType::Double> *SpawnOp(double_t);
 
-class Int8: public Operand{
-	public:
-		Int8(std::string const &value);
-		~Int8();
-
-		int getPrecision(void) const;
-		eOperandType getType(void)	const;
-		std::string const & toString(void) const;
-		byte *fromString(std::string s);
-};
-
-class Int16: public Operand{
-	public:
-		Int16(std::string const &value);
-		~Int16();
-
-		int getPrecision(void) const;
-		eOperandType getType(void)	const;
-		std::string const & toString(void) const;
-		byte *fromString(std::string s);
-};
-
-class Int32: public Operand{
-	public:
-		Int32(std::string const &value);
-		~Int32();
-
-		int getPrecision(void) const;
-		eOperandType getType(void)	const;
-		std::string const & toString(void) const;
-		byte *fromString(std::string s);
-};
-
-class Float: public Operand{
-	public:
-		Float(std::string const &value);
-		~Float();
-
-		int getPrecision(void) const;
-		eOperandType getType(void)	const;
-		std::string const & toString(void) const;
-		byte *fromString(std::string s);
-};
-
-class Double: public Operand{
-	public:
-		Double(std::string const &value);
-		~Double();
-
-		int getPrecision(void) const;
-		eOperandType getType(void)	const;
-		std::string const & toString(void) const;
-		byte *fromString(std::string s);
-};
 
 #endif
