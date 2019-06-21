@@ -13,7 +13,12 @@ Instruction *Instruction::createInstruction(std::string op, std::string param){
 		return new Dump();
 	if(op == "sum")
 		return new Sum();
-	
+	if(op == "sub")
+		return new Sub();
+	if(op == "mul")
+		return new Mul();
+	if(op == "div")
+		return new Div();
 
 	throw Instruction::InvalidInstruction();
 }
@@ -83,9 +88,78 @@ bool Sum::execute(std::vector<IOperand const *> &s){
 	IOperand const *a = *(s.end() - 1);
 	IOperand const *b = *(s.end() - 2);
 	IOperand const *c = *a + *b;
+	s.pop_back();
+	s.pop_back();
+	s.push_back(c);
 	return true;
 }
 
 /* * * * * * * * * * * *\
-|		End Start	 	|
+|		Sum Start	 	|
 \* * * * * * * * * * * */
+
+/* * * * * * * * * * * *\
+|		Sub Start	 	|
+\* * * * * * * * * * * */
+
+Sub::Sub(std::string par) : Instruction(par){}
+Sub::~Sub(){}
+
+bool Sub::execute(std::vector<IOperand const *> &s){
+	IOperand const *a = *(s.end() - 1);
+	IOperand const *b = *(s.end() - 2);
+	IOperand const *c = *a - *b;
+	s.pop_back();
+	s.pop_back();
+	s.push_back(c);
+	return true;
+}
+
+/* * * * * * * * * * * *\
+|		Sub Start	 	|
+\* * * * * * * * * * * */
+
+/* * * * * * * * * * * *\
+|		Mul Start	 	|
+\* * * * * * * * * * * */
+
+Mul::Mul(std::string par) : Instruction(par){}
+Mul::~Mul(){}
+
+bool Mul::execute(std::vector<IOperand const *> &s){
+	IOperand const *a = *(s.end() - 1);
+	IOperand const *b = *(s.end() - 2);
+	IOperand const *c = *a * *b;
+	s.pop_back();
+	s.pop_back();
+	s.push_back(c);
+	return true;
+}
+
+/* * * * * * * * * * * *\
+|		Mul Start	 	|
+\* * * * * * * * * * * */
+
+/* * * * * * * * * * * *\
+|		Div Start	 	|
+\* * * * * * * * * * * */
+
+Div::Div(std::string par) : Instruction(par){}
+Div::~Div(){}
+
+bool Div::execute(std::vector<IOperand const *> &s){
+	IOperand const *a = *(s.end() - 1);
+	IOperand const *b = *(s.end() - 2);
+	IOperand const *c = *a / *b;
+	s.pop_back();
+	s.pop_back();
+	s.push_back(c);
+	return true;
+}
+
+/* * * * * * * * * * * *\
+|		Div Start	 	|
+\* * * * * * * * * * * */
+
+
+

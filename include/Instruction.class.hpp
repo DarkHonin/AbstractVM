@@ -59,4 +59,27 @@ class Sum : public Instruction{
 		bool execute(std::vector<IOperand const *> &s);
 };
 
+class Sub : public Instruction{
+	public:
+		Sub(std::string param = "");
+		~Sub();
+		bool execute(std::vector<IOperand const *> &s);
+};
+
+
+class Mul : public Instruction{
+	public:
+		Mul(std::string param = "");
+		~Mul();
+		bool execute(std::vector<IOperand const *> &s);
+};
+
+class Div : public Instruction{
+	public:
+		Div(std::string param = "");
+		~Div();
+		bool execute(std::vector<IOperand const *> &s);
+};
+
+
 #endif

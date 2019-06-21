@@ -5,9 +5,7 @@
 
 const std::regex Program::command_regex = std::regex("^(\\w+)\\s*([\\w\\d\\(\\)-\\.]*);?(.*)?", std::regex_constants::ECMAScript | std::regex_constants::icase);
 
-Program::Program(std::istream &in) : _in(in){
-
-};
+Program::Program(std::istream &in) : _in(in){};
 
 Program::Program(Program &r) : Program(r._in){}
 Program::~Program(){}
