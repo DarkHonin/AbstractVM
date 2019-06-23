@@ -4,29 +4,30 @@
 #include <iostream>
 #include <regex>
 #include "IOperand.class.hpp"
+#include "Instruction.class.hpp"
 #include <exception>
 #include <vector>
 
 class Program{
-	static const std::regex command_regex;
 	public:
-
-		
 		class ValueOverflow : public std::exception{};
 		class ValueUnderflow : public std::exception{};
 		class StackOverflow : public std::exception{};
 		class StackUnderflow : public std::exception{};
-		
+		class ExpectedOpperhand : public std::exception{};
 
-		Program(std::istream &);
+		Program();
 		Program(Program &);
 		~Program();
 
-		bool next();
+		bool readProgram(std::istream &in);
+		bool readProgram(std::ifstream &in);
+		bool runProgram();
 
 	private:
-		std::istream & _in;
 		std::vector<IOperand const *> _stack;
+		std::vector<std::pair<instruction, IOperand const *>*> op;
+		Instructions lexigon;
 };
 
 #endif

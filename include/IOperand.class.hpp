@@ -4,8 +4,6 @@
 #include <string>
 #include <cmath>
 
-typedef unsigned char byte;
-
 enum eOperandType { Int8, Int16, Int32, Float, Double };
 
 class IOperand{

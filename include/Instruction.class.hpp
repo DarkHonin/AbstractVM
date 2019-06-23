@@ -2,10 +2,12 @@
 #define INSTRUCTION_H
 
 #include <string>
-#include <vector>
+#include <map>
 #include "IOperand.class.hpp"
 #include "OperandFactory.class.hpp"
 #include <regex>
+
+
 /*
 	Instructions:
 		push PARAM
@@ -21,65 +23,24 @@
 		exit
  */
 
-class Instruction{
+typedef bool (*instruction)(std::vector<IOperand const *> &, IOperand const *);
+class Instructions{
 	public:
 		class InvalidInstruction : public std::exception{};
-		Instruction(std::string param = "");
-		Instruction(Instruction &cp);
-		~Instruction();
+		class InvalidValue : public std::exception{};
+		class InvalidOperhand : public std::exception{};
 
-		static Instruction *createInstruction(std::string op, std::string param);
+		Instructions();
+		Instructions(Instructions const &cp);
+		~Instructions();
+
+		void regesterInstruction(std::string keyword, instruction action);
+
+		std::pair<instruction, IOperand const *> *parseLine(std::string line);
 		
-		virtual bool execute(std::vector<IOperand const *> &s) = 0;
-		const std::string _paramString;
+		private:
+			std::map<std::string, instruction> entries;
+
 };
-
-class Push : public Instruction{
-	public:
-		static const std::regex paramRegex;
-		static const std::string opperandIndex[5];
-		static const OperandFactory factory;
-
-		Push(std::string param = "");
-		~Push();
-		bool execute(std::vector<IOperand const *> &s);
-};
-
-class Dump : public Instruction{
-	public:
-		Dump(std::string param = "");
-		~Dump();
-		bool execute(std::vector<IOperand const *> &s);
-};
-
-class Sum : public Instruction{
-	public:
-		Sum(std::string param = "");
-		~Sum();
-		bool execute(std::vector<IOperand const *> &s);
-};
-
-class Sub : public Instruction{
-	public:
-		Sub(std::string param = "");
-		~Sub();
-		bool execute(std::vector<IOperand const *> &s);
-};
-
-
-class Mul : public Instruction{
-	public:
-		Mul(std::string param = "");
-		~Mul();
-		bool execute(std::vector<IOperand const *> &s);
-};
-
-class Div : public Instruction{
-	public:
-		Div(std::string param = "");
-		~Div();
-		bool execute(std::vector<IOperand const *> &s);
-};
-
 
 #endif

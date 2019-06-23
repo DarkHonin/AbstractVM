@@ -21,4 +21,6 @@ class OperandFactory{
 
 };
 
+static const OperandFactory factory = OperandFactory();
+
 #endif
