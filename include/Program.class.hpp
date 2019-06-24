@@ -8,13 +8,24 @@
 #include <exception>
 #include <vector>
 
+class ProgramException : public std::exception{
+	public:
+		const std::string ename;
+
+		ProgramException(std::string e);
+		ProgramException();
+		ProgramException(ProgramException const &e);
+		~ProgramException();
+};
+
 class Program{
 	public:
-		class ValueOverflow : public std::exception{};
-		class ValueUnderflow : public std::exception{};
-		class StackOverflow : public std::exception{};
-		class StackUnderflow : public std::exception{};
-		class ExpectedOpperhand : public std::exception{};
+		static const ProgramException ValueOverflow;
+		static const ProgramException ValueUnderflow;
+		static const ProgramException StackOverflow;
+		static const ProgramException StackUnderflow;
+		static const ProgramException ExpectedOperhand;
+		static const ProgramException AssertFailed;
 
 		Program();
 		Program(Program &);
@@ -23,6 +34,7 @@ class Program{
 		bool readProgram(std::istream &in);
 		bool readProgram(std::ifstream &in);
 		bool runProgram();
+		void handleNext(std::string line);
 
 	private:
 		std::vector<IOperand const *> _stack;

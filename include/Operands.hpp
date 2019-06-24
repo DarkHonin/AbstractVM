@@ -4,7 +4,7 @@
 #include <exception>
 #include "IOperand.class.hpp"
 #include "OperandFactory.class.hpp"
-
+#include <iostream>
 
 
 class Operand : public IOperand{
@@ -34,5 +34,6 @@ class Operand : public IOperand{
 		const int _presision;
 		const eOperandType _type;
 };
+
 
 #endif

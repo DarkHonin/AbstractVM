@@ -1,5 +1,6 @@
 #include "Operands.hpp"
 #include "OperandFactory.class.hpp"
+#include "Program.class.hpp"
 
 //static const OperandFactory factory;
 
@@ -70,15 +71,15 @@ IOperand const * Operand::operator*(IOperand const &rhs) const{
 IOperand const * Operand::operator/(IOperand const &rhs) const{
 	double mine = toData(*this);
 	double RHS = toData(rhs);
+	if(RHS == 0) throw ProgramException("Cannot devide by zero");
 	eOperandType result = std::max(this->getType(), rhs.getType());	// The resulting type
 	return factory.createOperand(result, std::to_string(mine / RHS));
 }
 IOperand const * Operand::operator%(IOperand const &rhs) const{
 	double mine = toData(*this);
 	double RHS = toData(rhs);
+	if(RHS == 0) throw ProgramException("Cannot devide by zero");
 	eOperandType result = std::max(this->getType(), rhs.getType());	// The resulting type
-	double hold = mine / RHS;
-	hold -= (int) hold;
-	hold *= 10;
+	double hold = std::fmod(mine, RHS);
 	return factory.createOperand(result, std::to_string(hold));
 }
