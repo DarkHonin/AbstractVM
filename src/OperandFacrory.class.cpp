@@ -18,17 +18,17 @@ IOperand const * OperandFactory::createOperand( eOperandType type, std::string c
 }
 
 IOperand const * OperandFactory::createInt8(std::string const & value ) const{
-	return new Operand((int8_t)std::stoi(value));
+	return new Operand(stow<int8_t>(value));
 }
 IOperand const * OperandFactory::createInt16(std::string const & value ) const{
-	return new Operand((int16_t)std::stoi(value));
+	return new Operand(stow<int16_t>(value));
 }
 IOperand const * OperandFactory::createInt32(std::string const & value ) const{
-	return new Operand((int32_t)std::stoi(value));
+	return new Operand(stow<int32_t>(value));
 }
 IOperand const * OperandFactory::createFloat(std::string const & value ) const{
-	return new Operand((float_t)std::stof(value));
+	return new Operand(stow<float_t>(value));
 }
 IOperand const * OperandFactory::createDouble(std::string const & value ) const{
-	return new Operand((double_t)std::stod(value));
+	return new Operand(stow<double_t>(value));
 }

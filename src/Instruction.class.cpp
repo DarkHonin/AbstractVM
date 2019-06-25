@@ -32,7 +32,6 @@ Instructions::~Instructions(){}
 
 void Instructions::regesterInstruction(std::string keyword, instruction action){
 	this->entries.insert(std::pair<std::string, instruction>(keyword, action));
-	std::cout << "Registered:: " << keyword << std::endl;
 }
 
 std::pair<instruction, IOperand const *> *Instructions::parseLine(std::string line){

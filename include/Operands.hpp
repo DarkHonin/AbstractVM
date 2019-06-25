@@ -31,8 +31,8 @@ class Operand : public IOperand{
 
 	private:
 		const void * _value;
-		const int _presision;
 		const eOperandType _type;
+		const int _presision;
 };
 
 

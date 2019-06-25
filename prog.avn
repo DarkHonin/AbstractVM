@@ -1,5 +1,6 @@
-push int8(10)
+push int8(1000)
 push int8(20)
 div
+assert int8(2)
 dump
 exit

@@ -2,8 +2,17 @@
 #define OPERANDFACTORY_H
 
 #include "IOperand.class.hpp"
+#include <limits>
+#include "ProgramE.class.hpp"
+template<typename t>
+t stow(std::string st){
+	std::numeric_limits<t> lim;
+	double val = std::stod(st);
+	if(val > lim.max()) throw ProgramException("Value overflow") ;
+	if(val < lim.min()) throw ProgramException("Value underflow") ;
+	return val;
+}
 
-#include <map>
 class OperandFactory;
 typedef IOperand const *(OperandFactory::*creator)(std::string const &v) const;
 

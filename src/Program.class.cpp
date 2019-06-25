@@ -12,6 +12,9 @@ const ProgramException Program::ExpectedOperhand("Expected opperhand");
 const ProgramException Program::AssertFailed("Assert failure");
 
 bool exit(std::vector<IOperand const *> & stack, IOperand const *opParam){
+	if(opParam) throw ProgramException("Unexpected operhand");
+	for(std::vector<IOperand const *>::iterator i = stack.begin(); i != stack.end(); i++)
+		delete *i;
 	return false;
 }
 
@@ -22,12 +25,14 @@ bool push(std::vector<IOperand const *> & stack, IOperand const *opParam){
 }
 
 bool pop(std::vector<IOperand const *> & stack, IOperand const *opParam){
+	if(opParam) throw ProgramException("Unexpected operhand");
 	if(!stack.size()) throw Program::StackUnderflow;
 	stack.pop_back();
 	return true;
 }
 
 bool dump(std::vector<IOperand const *> & stack, IOperand const *opParam){
+	if(opParam) throw ProgramException("Unexpected operhand");
 	std::vector<IOperand const *>::iterator I = stack.begin();
 	while(I != stack.end())
 		std::cout << (*I++)->toString() << std::endl;
@@ -35,6 +40,7 @@ bool dump(std::vector<IOperand const *> & stack, IOperand const *opParam){
 }
 
 bool sum(std::vector<IOperand const *> & stack, IOperand const *opParam){
+	if(opParam) throw ProgramException("Unexpected operhand");
 	if(stack.size() < 2) throw Program::StackUnderflow;
 	IOperand const *A = stack[stack.size() - 1];
 	IOperand const *B = stack[stack.size() - 2];
@@ -48,6 +54,7 @@ bool sum(std::vector<IOperand const *> & stack, IOperand const *opParam){
 }
 
 bool sub(std::vector<IOperand const *> & stack, IOperand const *opParam){
+	if(opParam) throw ProgramException("Unexpected operhand");
 	if(stack.size() < 2) throw Program::StackUnderflow;
 	IOperand const *A = stack[stack.size() - 1];
 	IOperand const *B = stack[stack.size() - 2];
@@ -61,6 +68,7 @@ bool sub(std::vector<IOperand const *> & stack, IOperand const *opParam){
 }
 
 bool mul(std::vector<IOperand const *> & stack, IOperand const *opParam){
+	if(opParam) throw ProgramException("Unexpected operhand");
 	if(stack.size() < 2) throw Program::StackUnderflow;
 	IOperand const *A = stack[stack.size() - 1];
 	IOperand const *B = stack[stack.size() - 2];
@@ -74,6 +82,7 @@ bool mul(std::vector<IOperand const *> & stack, IOperand const *opParam){
 }
 
 bool div(std::vector<IOperand const *> & stack, IOperand const *opParam){
+	if(opParam) throw ProgramException("Unexpected operhand");
 	if(stack.size() < 2) throw Program::StackUnderflow;
 	IOperand const *A = stack[stack.size() - 1];
 	IOperand const *B = stack[stack.size() - 2];
@@ -87,6 +96,7 @@ bool div(std::vector<IOperand const *> & stack, IOperand const *opParam){
 }
 
 bool mod(std::vector<IOperand const *> & stack, IOperand const *opParam){
+	if(opParam) throw ProgramException("Unexpected operhand");
 	if(stack.size() < 2) throw Program::StackUnderflow;
 	IOperand const *A = stack[stack.size() - 1];
 	IOperand const *B = stack[stack.size() - 2];
@@ -99,7 +109,7 @@ bool mod(std::vector<IOperand const *> & stack, IOperand const *opParam){
 	return true;
 }
 
-bool assert(std::vector<IOperand const *> & stack, IOperand const *opParam){
+bool fassert(std::vector<IOperand const *> & stack, IOperand const *opParam){
 	if(stack.size() < 1) throw Program::StackUnderflow;
 	if(!opParam) throw Program::ExpectedOperhand;
 	IOperand const *A = stack[stack.size() - 1];
@@ -108,6 +118,7 @@ bool assert(std::vector<IOperand const *> & stack, IOperand const *opParam){
 }
 
 bool print(std::vector<IOperand const *> & stack, IOperand const *opParam){
+	if(opParam) throw ProgramException("Unexpected operhand");
 	if(stack.size() < 1) throw Program::StackUnderflow;
 	IOperand const *A = stack[stack.size() - 1];
 	if(A->getType() != eOperandType::Int8) throw Program::AssertFailed;
@@ -125,7 +136,7 @@ Program::Program() : lexigon(){
 	this->lexigon.regesterInstruction("mul", &mul);
 	this->lexigon.regesterInstruction("div", &div);
 	this->lexigon.regesterInstruction("mod", &mod);
-	this->lexigon.regesterInstruction("assert", &assert);
+	this->lexigon.regesterInstruction("assert", &fassert);
 	this->lexigon.regesterInstruction("print", &print);
 };
 
@@ -133,7 +144,7 @@ Program::Program(Program &r) : lexigon(r.lexigon){}
 Program::~Program(){}
 
 void Program::handleNext(std::string line){
-	int rp = 0;
+	size_t rp = 0;
 	while((rp = line.find('\n')) != std::string::npos)
 		line.replace(rp, 2, "");
 	while((rp = line.find('\r')) != std::string::npos)
@@ -152,15 +163,15 @@ void Program::handleNext(std::string line){
 }
 
 bool Program::readProgram(std::istream &in){
-	int linei = 0;
+	int linei = 1;
 	std::string line;
 	while(true){
 		std::getline(in, line);
 		if(line == ";;") break;
 		try{
 			this->handleNext(line);
-		}catch(std::exception &e){
-			std::cout << "::" << linei << std::endl;
+		}catch (ProgramException e){
+			std::cout << e.ename << " :: Line " << linei << std::endl;
 		}
 		linei++;
 	}
@@ -168,15 +179,14 @@ bool Program::readProgram(std::istream &in){
 }
 
 bool Program::readProgram(std::ifstream &in){
-	int linei = 0;
+	int linei = 1;
 	std::string line;
-	std::pair<instruction, IOperand const *> * hold;
 	while(std::getline(in, line)){
 		if(line.size() == 0) continue;
 		try{
 			this->handleNext(line);
-		}catch(std::exception &e){
-			std::cout << "::" << linei << std::endl;
+		}catch (ProgramException e){
+			std::cout << e.ename << " :: Line " << linei << std::endl;
 		}
 		linei++;
 	}
@@ -187,7 +197,7 @@ bool Program::runProgram(){
 	std::vector<std::pair<instruction, IOperand const *>*>::iterator point = this->op.begin();
 	std::pair<instruction, IOperand const *> currentOP;
 	instruction ins;
-	int linei = 0;
+	int linei = 1;
 	while(point != this->op.end()){
 		currentOP = **point;
 		ins = currentOP.first;

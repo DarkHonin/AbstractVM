@@ -7,16 +7,7 @@
 #include "Instruction.class.hpp"
 #include <exception>
 #include <vector>
-
-class ProgramException : public std::exception{
-	public:
-		const std::string ename;
-
-		ProgramException(std::string e);
-		ProgramException();
-		ProgramException(ProgramException const &e);
-		~ProgramException();
-};
+#include "ProgramE.class.hpp"
 
 class Program{
 	public:
