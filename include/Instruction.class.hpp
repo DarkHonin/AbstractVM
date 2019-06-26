@@ -26,10 +26,7 @@
 typedef bool (*instruction)(std::vector<IOperand const *> &, IOperand const *);
 class Instructions{
 	public:
-		class InvalidInstruction : public std::exception{};
-		class InvalidValue : public std::exception{};
-		class InvalidOperhand : public std::exception{};
-
+		
 		Instructions();
 		Instructions(Instructions const &cp);
 		~Instructions();

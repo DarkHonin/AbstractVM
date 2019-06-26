@@ -149,17 +149,9 @@ void Program::handleNext(std::string line){
 		line.replace(rp, 2, "");
 	while((rp = line.find('\r')) != std::string::npos)
 		line.replace(rp, 2, "");
-	try{
-		std::pair<instruction, const IOperand *> *hold = this->lexigon.parseLine(line);
-		if (hold)
-			this->op.push_back(hold);
-	}catch (Instructions::InvalidInstruction &e){
-		std::cout << "Invalid instruction '" << line;
-		throw new std::exception;
-	}catch (Instructions::InvalidOperhand &e){
-		std::cout << "Invalid Operhand '" << line;
-		throw new std::exception;
-	}
+	std::pair<instruction, const IOperand *> *hold = this->lexigon.parseLine(line);
+	if (hold)
+		this->op.push_back(hold);
 }
 
 bool Program::readProgram(std::istream &in){
@@ -172,6 +164,7 @@ bool Program::readProgram(std::istream &in){
 			this->handleNext(line);
 		}catch (ProgramException e){
 			std::cout << e.ename << " :: Line " << linei << std::endl;
+			return false;
 		}
 		linei++;
 	}
@@ -187,6 +180,7 @@ bool Program::readProgram(std::ifstream &in){
 			this->handleNext(line);
 		}catch (ProgramException e){
 			std::cout << e.ename << " :: Line " << linei << std::endl;
+			return false;
 		}
 		linei++;
 	}
@@ -205,6 +199,7 @@ bool Program::runProgram(){
 			if(! ins(this->_stack, currentOP.second)) return false;
 		}catch (ProgramException e){
 			std::cout << e.ename << " :: Line " << linei << std::endl;
+			return false;
 		}
 		point++;
 		linei++;

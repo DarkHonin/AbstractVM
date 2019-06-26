@@ -11,12 +11,12 @@ IOperand const * parseOperhand(std::string operhand){
 	if(operhand.empty()) return nullptr;
 	std::smatch match;
 	std::regex_match(operhand, match, OperhandRegex);
-	if (match.empty()) throw new Instructions::InvalidOperhand();
+	if (match.empty()) throw ProgramException("Invalid operhand");
 	int x;
 	for(x = 0;x < 5; x++ )
 		if(operandIndex[x] == match[1])
 			break;
-	if(match[2]=="") throw new Instructions::InvalidValue;
+	if(match[2]=="") throw ProgramException("Invalid Value");
 
 	return factory.createOperand((eOperandType)x, match[2]);
 }
@@ -38,9 +38,9 @@ std::pair<instruction, IOperand const *> *Instructions::parseLine(std::string li
 	std::smatch match;
 	std::regex_match(line, match, Instruction_regex);
 	if(line[0] == ';') return nullptr;
-	if (match.empty()) throw Instructions::InvalidInstruction();
+	if (match.empty()) throw ProgramException("Invalid instruction");
 	std::map<std::string, instruction>::iterator entry = this->entries.find(match[1].str());
-	if(entry == this->entries.end()) throw Instructions::InvalidInstruction();			// Could not find instruction
+	if(entry == this->entries.end()) throw ProgramException("Invalid instruction");
 	
 	return new std::pair<instruction, IOperand const *>(entry->second, parseOperhand(match[2].str()));
 }

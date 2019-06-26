@@ -7,10 +7,16 @@
 template<typename t>
 t stow(std::string st){
 	std::numeric_limits<t> lim;
-	double val = std::stod(st);
-	if(val > lim.max()) throw ProgramException("Value overflow") ;
-	if(val < lim.min()) throw ProgramException("Value underflow") ;
-	return val;
+	try{
+		double val = std::stod(st);
+		if(val > lim.max()) throw ProgramException("Value overflow") ;
+		if(val < lim.min()) throw ProgramException("Value underflow") ;
+		return val;
+	}catch(std::invalid_argument e){
+		throw ProgramException("Invalid value");
+	}catch(std::out_of_range e){
+		throw ProgramException("Value out of range");
+	}
 }
 
 class OperandFactory;
